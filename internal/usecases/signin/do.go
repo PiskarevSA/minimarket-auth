@@ -5,10 +5,11 @@ import (
 	"errors"
 	"time"
 
-	"github.com/PiskarevSA/minimarket-points/internal/storage"
-	"github.com/PiskarevSA/minimarket-points/internal/usecases"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
+
+	"github.com/PiskarevSA/minimarket-points/internal/storage"
+	"github.com/PiskarevSA/minimarket-points/internal/usecases"
 )
 
 type Result struct {

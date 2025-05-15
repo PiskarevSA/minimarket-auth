@@ -4,8 +4,9 @@ import (
 	"context"
 	"errors"
 
-	"github.com/PiskarevSA/minimarket-points/pkg/ctxkey"
 	"github.com/jackc/pgx/v5"
+
+	"github.com/PiskarevSA/minimarket-points/pkg/ctxkey"
 )
 
 var (

@@ -5,12 +5,13 @@ import (
 	"errors"
 	"time"
 
-	"github.com/PiskarevSA/minimarket-points/internal/events"
-	"github.com/PiskarevSA/minimarket-points/internal/storage"
-	"github.com/PiskarevSA/minimarket-points/internal/usecases"
 	json "github.com/bytedance/sonic"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
+
+	"github.com/PiskarevSA/minimarket-points/internal/events"
+	"github.com/PiskarevSA/minimarket-points/internal/storage"
+	"github.com/PiskarevSA/minimarket-points/internal/usecases"
 
 	"github.com/jackc/pgx/v5"
 )

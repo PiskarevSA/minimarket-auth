@@ -4,9 +4,10 @@ import (
 	"context"
 	"time"
 
+	"github.com/google/uuid"
+
 	"github.com/PiskarevSA/minimarket-points/internal/domain/objects"
 	"github.com/PiskarevSA/minimarket-points/internal/events"
-	"github.com/google/uuid"
 )
 
 type Storage interface {

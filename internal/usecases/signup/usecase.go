@@ -3,8 +3,9 @@ package signup
 import (
 	"time"
 
-	"github.com/PiskarevSA/minimarket-points/pkg/pgx/transactor"
 	"github.com/golang-jwt/jwt/v5"
+
+	"github.com/PiskarevSA/minimarket-points/pkg/pgx/transactor"
 )
 
 type Usecase struct {

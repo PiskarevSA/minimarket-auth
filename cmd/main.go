@@ -6,12 +6,13 @@ import (
 	"log"
 	"time"
 
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
+
 	"github.com/PiskarevSA/minimarket-points/internal/storage/postgresql"
 	"github.com/PiskarevSA/minimarket-points/internal/usecases/signin"
 	"github.com/PiskarevSA/minimarket-points/internal/usecases/signup"
 	"github.com/PiskarevSA/minimarket-points/pkg/pgx/transactor"
-	"github.com/golang-jwt/jwt/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 const connUrl = "postgres://user:password@127.0.0.1:5432?sslmode=disable"
@@ -53,5 +54,4 @@ func main() {
 		ctx, "mtchuikov", "jtuM6mwNvD3PIHjIwjNfhp1",
 	)
 	fmt.Println(result1, err)
-
 }

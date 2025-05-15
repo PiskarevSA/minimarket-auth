@@ -4,10 +4,11 @@ import (
 	"context"
 	"errors"
 
+	"github.com/jackc/pgx/v5"
+
 	"github.com/PiskarevSA/minimarket-points/internal/domain/entities"
 	"github.com/PiskarevSA/minimarket-points/internal/domain/objects"
 	"github.com/PiskarevSA/minimarket-points/internal/storage"
-	"github.com/jackc/pgx/v5"
 )
 
 func (s *Storage) GetAccountCredentials(
@@ -26,5 +27,4 @@ func (s *Storage) GetAccountCredentials(
 		UserId:       creds.UserId,
 		PasswordHash: []byte(creds.PasswordHash),
 	}, nil
-
 }
