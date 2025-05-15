@@ -1,0 +1,43 @@
+networks:
+  minimarket:
+    external: true
+
+volumes:
+  timescale_data:
+  pgadmin_data:
+
+services:
+  timescale:
+    image: timescale/timescaledb:latest-pg17
+    container_name: timescale
+    ports:
+      - 127.0.0.1:5432:5432
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - timescale_data:/var/lib/postgresql/data
+    networks:
+      - minimarket
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    ports:
+      - 127.0.0.1:5430:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - minimarket
+
+  nats:
+    image: nats
+    container_name: nats
+    command: -js
+    ports:
+      - 127.0.0.1:4222:4222
+    networks:
+      - minimarket

@@ -1,0 +1,32 @@
+version: "2"
+
+overrides:
+  go:
+    rename:
+      id: Id
+      order_id: OrderId
+      user_id: UserId
+
+    overrides:
+      - db_type: "uuid"
+        go_type:
+          import: "github.com/google/uuid"
+          type: "UUID"
+
+      - db_type: "timestamptz"
+        go_type:
+          import: "time"
+          type: "Time"
+
+sql:
+  - schema: sql/migrations
+    queries: sql/queries
+    engine: postgresql
+    gen:
+      go: &go-gen
+        sql_package: pgx/v5
+        sql_driver: github.com/jackc/pgx/v5
+
+        package: postgresql
+        out: internal/gen/sqlc/postgresql
+        emit_interface: true
