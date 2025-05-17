@@ -1,0 +1,14 @@
+type: object
+properties:
+  code:
+    description: Уникальный код серверной ошибки
+    type: string
+    enum: ["S1394"]
+  message:
+    description: Человеко‑читаемое сообщение об ошибке
+    type: string
+    enum: ["internal error"]
+required:
+  - code
+  - message
+x-go-name: "InternalServerErrorResponse"

@@ -1,0 +1,24 @@
+type: object
+properties:
+  userId:
+    description: Идентификатор пользователя
+    example: e956b175-794c-4f71-960b-a5d00b27a2e2
+    type: string
+    format: uuid
+  accessToken:
+    description: JWT-токен доступа для выполнения аутентифицированных запросов
+    examples: |
+        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlOTU2YjE3NS03OTRjLTRmNzEtOTYwYi1hNWMwMGIyN2EyZTIiLCJleHAiOjE3NTI0\MDY0MDB9.dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk
+    type: string
+    format: jwt
+  refreshToken:
+    description: JWT-токен обновления для получения нового accessToken
+    examples: |
+      eyJ1c2VySWQiOiJlOTU2YjE3NS03OTRjLTRmNzEtOTYwYi1hNWMwMGIyN2EyZTIiLCJ0eXBlIjoicmVmcmVzaCJ9.hJtXIZ2uSN5G_XFQyrYJ0xNiIWv1U0Qx3_8V0t7VZHw
+    type: string
+    format: jwt
+required:
+  - userId
+  - accessToken
+  - refreshToken
+x-go-name: "LoginResponse"

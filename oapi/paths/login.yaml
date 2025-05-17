@@ -1,0 +1,40 @@
+post:
+  operationId: login
+  description: Вход пользователя в систему
+  tags:
+    - Auth
+  requestBody:
+      description: Данные для входа
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../objects/LoginRequest.yaml"
+  responses:
+    "200":
+      description: Вход в систему выполнен
+      content:
+        application/json:
+          schema:
+            $ref: "../objects/RegisterResponse.yaml"
+    "400":
+      description: Предоставлены данные неправильного формата
+      content:
+        application/json:
+          schema:
+            $ref: "../errors/ValidationError.yaml"
+    "422":
+      description: Нарушены бизнес-правила
+      content:
+        application/json:
+          schema:
+            $ref: "../errors/DomainError.yaml"
+          example:
+            code: "D1002"
+            message: "invalid login or password"
+    "500":
+      description: Внутренняя ошибка сервера
+      content:
+        application/json:
+          schema:
+            $ref: "../errors/InternalServerError.yaml"

@@ -8,16 +8,27 @@ import (
 
 type Password []byte
 
+type PasswordError struct{ msg string }
+
+func (e *PasswordError) Error() string {
+	return e.msg
+}
+
+const (
+	mixPasswordLen = 12
+	maxPasswordLen = 24
+)
+
 var (
-	ErrPasswordTooShort = errors.New("password too short")
-	ErrPasswordTooLong  = errors.New("password too long")
+	ErrPasswordTooShort = &PasswordError{"password too short"}
+	ErrPasswordTooLong  = &PasswordError{"password too long"}
 )
 
 var NilPassword Password = nil
 
 func NewPassword(value string) (Password, error) {
 	passwordLen := len(value)
-	if passwordLen < 12 {
+	if passwordLen < mixPasswordLen {
 		return NilPassword, ErrPasswordTooShort
 	}
 
@@ -37,7 +48,7 @@ func (o Password) Hash() []byte {
 	return hash
 }
 
-func (o Password) IsMatchHash(hash []byte) (bool, error) {
+func (o Password) IsHashMatch(hash []byte) (bool, error) {
 	err := bcrypt.CompareHashAndPassword(hash, o)
 	if err != nil {
 		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {

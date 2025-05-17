@@ -29,4 +29,3 @@ sql:
 
         package: postgresql
         out: internal/gen/sqlc/postgresql
-        emit_interface: true

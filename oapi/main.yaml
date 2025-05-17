@@ -1,0 +1,21 @@
+openapi: 3.0.0
+info:
+  title: API аутентификации пользователей
+  version: 1.0.0
+  description: Сервис аутентификации пользователей и управления учетными записями
+  contact:
+    name: ООО "Минимаркет"
+    email: minimarket@admin.com
+    url: https://github.com/PiskarevSA/minimarket-auth
+servers:
+  - url: https://127.0.0.1:8624
+    description: Локальный сервер для тестов
+tags:
+  - name: Auth
+
+paths:
+  /api/user/register:
+    $ref: "paths/register.yaml"
+
+  /api/user/login:
+    $ref: "paths/login.yaml"

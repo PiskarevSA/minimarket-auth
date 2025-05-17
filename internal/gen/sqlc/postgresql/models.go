@@ -20,7 +20,7 @@ type Account struct {
 
 type Outbox struct {
 	Id        int64
-	Event     string
+	Eventname string
 	Status    string
 	Payload   []byte
 	CreatedAt time.Time

@@ -1,0 +1,41 @@
+post:
+  operationId: register
+  description: Регистрация пользователя
+  tags:
+    - Auth
+  requestBody:
+      description: Данные для регистрации
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../objects/RegisterRequest.yaml"
+  responses:
+    "200":
+      description: Регистрация выполнена
+      content:
+        application/json:
+          schema:
+            $ref: "../objects/RegisterResponse.yaml"
+    "400":
+      description: Предоставлены данные неправильного формата
+      content:
+        application/json:
+          schema:
+            $ref: "../errors/ValidationError.yaml"
+    "422":
+      description: Нарушены бизнес-правила
+      content:
+        application/json:
+          schema:
+            $ref: "../errors/DomainError.yaml"
+          example:
+            code: "D1026"
+            message: "login %(login)% already in use"
+    "500":
+      description: Внутренняя ошибка сервера
+      content:
+        application/json:
+          schema:
+            $ref: "../errors/InternalServerError.yaml"
+            

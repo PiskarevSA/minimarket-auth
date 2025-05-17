@@ -1,0 +1,18 @@
+type: object
+properties:
+  login:
+    description: Логин пользователя
+    example: sannt
+    type: string
+    minLength: 5
+    maxLength: 24
+  password:
+    description: Пароль пользователя
+    example: n9PCfuyJ5JhhkdTc4eWtoxuJ
+    type: string
+    minLength: 8
+    maxLength: 32
+required:
+  - login
+  - password
+x-go-name: "LoginRequest"

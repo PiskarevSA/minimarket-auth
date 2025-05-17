@@ -1,0 +1,34 @@
+version: '3.0'
+
+tasks:
+  run:codegen:
+    cmds:
+      - task: bundle-oapi
+      - task: create-dir
+      - oapi-codegen -config .oapi-codegen.yaml ./oapi/combined.gen.yaml
+      - task: optimize-generated-code
+
+  bundle-oapi:
+    desc: |
+      Комбинирует все OpenAPI манифесты в единый файл перед запуском
+      кодогенерации при помощи Redocly. Это нужно т.к. oapi-codegen 
+      не способен генерировать код из нескольких манифестов.
+    cmds:
+      - redocly bundle ./oapi/main.yaml -o ./oapi/combined.gen.yaml
+ 
+  create-dir:
+    desc: |
+      Проверяет создана ли директория для файлов перед запуском
+      кодогенерации. Это нужно т.к. oapi-codegen не способен создать
+      директорию для вывода автоматически.
+    cmds:
+      - mkdir -p ./internal/gen/oapi
+
+  optimize-generated-code:
+    desc: |
+      Оптимизирует сгенерированный код через замену стандартной
+      библиотеки encoding/json library на более быстрый аналог
+    cmds:
+      - sed -i 's|"encoding/json"|json "github.com/bytedance/sonic"|g' ./internal/gen/oapi/oapi.gen.go
+      - sed -i 's|json\.NewEncoder|json.ConfigDefault.NewEncoder|g' ./internal/gen/oapi/oapi.gen.go
+      - sed -i 's|json\.NewDecoder|json.ConfigDefault.NewDecoder|g' ./internal/gen/oapi/oapi.gen.go

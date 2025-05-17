@@ -2,56 +2,46 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"log"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
-
-	"github.com/PiskarevSA/minimarket-points/internal/storage/postgresql"
-	"github.com/PiskarevSA/minimarket-points/internal/usecases/signin"
-	"github.com/PiskarevSA/minimarket-points/internal/usecases/signup"
-	"github.com/PiskarevSA/minimarket-points/pkg/pgx/transactor"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
+	"github.com/urfave/cli/v3"
 )
 
-const connUrl = "postgres://user:password@127.0.0.1:5432?sslmode=disable"
-
 func main() {
-	ctx := context.Background()
+	rootCtx := context.Background()
 
-	pool, err := pgxpool.New(ctx, connUrl)
-	if err != nil {
-		log.Fatalln(err)
+	zerolog.LevelFieldName = "lvl"
+	zerolog.ErrorFieldName = "err"
+	zerolog.MessageFieldName = "msg"
+	zerolog.TimeFieldFormat = time.RFC1123
+
+	log.Logger = log.Logger.
+		Level(zerolog.InfoLevel).With().
+		Timestamp().
+		Logger()
+
+	stopCtx, stop := signal.NotifyContext(
+		rootCtx,
+		syscall.SIGINT,
+		syscall.SIGTERM,
+	)
+	defer stop()
+
+	rootCli := cli.Command{
+		Name:     "minimarket-auth",
+		Version:  "1.0.0",
+		Commands: []*cli.Command{run},
 	}
 
-	storage := postgresql.New(pool)
-
-	signup := signup.New(
-		"auth",
-		storage,
-		transactor.New(pool),
-		[]byte("jwt"),
-		jwt.SigningMethodHS256,
-		time.Hour,
-		time.Hour,
-	)
-
-	result, err := signup.Do(
-		ctx, "mtchuikov", "jtuM6mwNvhD3PIHjIwjNfhp1",
-	)
-	fmt.Println(result, err)
-
-	signin := signin.New(
-		storage,
-		[]byte("jwt"),
-		jwt.SigningMethodHS256,
-		time.Hour,
-		time.Hour,
-	)
-
-	result1, err := signin.Do(
-		ctx, "mtchuikov", "jtuM6mwNvD3PIHjIwjNfhp1",
-	)
-	fmt.Println(result1, err)
+	err := rootCli.Run(stopCtx, os.Args)
+	if err != nil {
+		log.Fatal().
+			Err(err).
+			Msg("failed to setup cli")
+	}
 }

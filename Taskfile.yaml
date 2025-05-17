@@ -1,0 +1,28 @@
+version: '3.0'
+
+includes:
+  oapi-codegen: 
+    taskfile: taskfiles/OapiCodegen.yaml
+    internal: true
+
+vars:
+  ROOT:
+    sh: pwd
+
+tasks:
+  generate:oapi:
+    desc: |
+      Генерирует шаблонный код Go HTTP сервера на основе спецификации
+      формата OpenAPI при помощи oapi-codegen. Перед этим создает
+      единый манифест OpenAPI при помощи Redocly, а после оптимизирует
+      сгенерированный код через замену стандартной библиотеки
+      encoding/json на более быстрый аналог.
+    cmds:
+      - task: oapi-codegen:run:codegen
+
+  generate:sqlc:
+    desc: |
+      Генерирует шаблонный код для взаимодействия с базой данных на 
+      основе SQL при помощи SQLc.
+    cmds:
+      - sqlc generate -f .sqlc.yaml

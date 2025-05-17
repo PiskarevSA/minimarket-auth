@@ -1,0 +1,220 @@
+openapi: 3.0.0
+info:
+  title: API аутентификации пользователей
+  version: 1.0.0
+  description: Сервис аутентификации пользователей и управления учетными записями
+  contact:
+    name: ООО "Минимаркет"
+    email: minimarket@admin.com
+    url: https://github.com/PiskarevSA/minimarket-auth
+servers:
+  - url: https://127.0.0.1:8624
+    description: Локальный сервер для тестов
+tags:
+  - name: Auth
+paths:
+  /api/user/register:
+    post:
+      operationId: register
+      description: Регистрация пользователя
+      tags:
+        - Auth
+      requestBody:
+        description: Данные для регистрации
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '200':
+          description: Регистрация выполнена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterResponse'
+        '400':
+          description: Предоставлены данные неправильного формата
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '422':
+          description: Нарушены бизнес-правила
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainError'
+              example:
+                code: D1026
+                message: login %(login)% already in use
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /api/user/login:
+    post:
+      operationId: login
+      description: Вход пользователя в систему
+      tags:
+        - Auth
+      requestBody:
+        description: Данные для входа
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Вход в систему выполнен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterResponse'
+        '400':
+          description: Предоставлены данные неправильного формата
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '422':
+          description: Нарушены бизнес-правила
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainError'
+              example:
+                code: D1002
+                message: invalid login or password
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+components:
+  schemas:
+    RegisterRequest:
+      type: object
+      properties:
+        login:
+          description: Логин пользователя
+          example: sannt
+          type: string
+          minLength: 5
+          maxLength: 24
+        password:
+          description: Пароль пользователя
+          example: n9PCfuyJ5JhhkdTc4eWtoxuJ
+          type: string
+          minLength: 8
+          maxLength: 32
+      required:
+        - login
+        - password
+      x-go-name: LoginRequest
+    RegisterResponse:
+      type: object
+      properties:
+        userId:
+          description: Идентификатор пользователя
+          example: e956b175-794c-4f71-960b-a5d00b27a2e2
+          type: string
+          format: uuid
+        accessToken:
+          description: JWT-токен доступа для выполнения аутентифицированных запросов
+          examples: |
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlOTU2YjE3NS03OTRjLTRmNzEtOTYwYi1hNWMwMGIyN2EyZTIiLCJleHAiOjE3NTI0\MDY0MDB9.dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk
+          type: string
+          format: jwt
+        refreshToken:
+          description: JWT-токен обновления для получения нового accessToken
+          examples: |
+            eyJ1c2VySWQiOiJlOTU2YjE3NS03OTRjLTRmNzEtOTYwYi1hNWMwMGIyN2EyZTIiLCJ0eXBlIjoicmVmcmVzaCJ9.hJtXIZ2uSN5G_XFQyrYJ0xNiIWv1U0Qx3_8V0t7VZHw
+          type: string
+          format: jwt
+      required:
+        - userId
+        - accessToken
+        - refreshToken
+      x-go-name: LoginResponse
+    ValidationError:
+      type: object
+      properties:
+        code:
+          description: Уникальный код ошибки валидацииы
+          type: string
+          enum:
+            - V1142
+            - V1078
+          example: V1142
+        field:
+          description: Имя поля с данными неверного формата
+          type: string
+          example: userId
+        message:
+          description: Человеко‑читаемое сообщение об ошибке
+          type: string
+          example: must be in uuid
+      required:
+        - code
+        - field
+        - message
+      x-go-name: ValidationErrorResponse
+    DomainError:
+      type: object
+      properties:
+        code:
+          description: Уникальный код доменной ошибки
+          type: string
+          enum:
+            - D1002
+            - D1026
+          example: D1002
+        message:
+          description: Человеко‑читаемое сообщение об ошибке
+          type: string
+          example: login %(login)% already in use
+      required:
+        - code
+        - message
+      x-go-name: DomainErrorResponse
+    InternalServerError:
+      type: object
+      properties:
+        code:
+          description: Уникальный код серверной ошибки
+          type: string
+          enum:
+            - S1394
+        message:
+          description: Человеко‑читаемое сообщение об ошибке
+          type: string
+          enum:
+            - internal error
+      required:
+        - code
+        - message
+      x-go-name: InternalServerErrorResponse
+    LoginRequest:
+      type: object
+      properties:
+        login:
+          description: Логин пользователя
+          example: sannt
+          type: string
+          minLength: 5
+          maxLength: 24
+        password:
+          description: Пароль пользователя
+          example: n9PCfuyJ5JhhkdTc4eWtoxuJ
+          type: string
+          minLength: 8
+          maxLength: 32
+      required:
+        - login
+        - password
+      x-go-name: LoginRequest

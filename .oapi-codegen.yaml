@@ -1,0 +1,10 @@
+package: oapi
+
+generate:
+  chi-server: true
+  strict-server: true
+  models: true
+
+output: internal/gen/oapi/oapi.gen.go
+output-options:
+  name-normalizer: ToCamelCase
