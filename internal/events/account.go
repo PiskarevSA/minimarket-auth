@@ -13,8 +13,6 @@ type AccountRegisteredPayload struct {
 
 const EventAccountRegistered = "ACCOUNTS.REGISTERED"
 
-var AccountRegistered event
-
 func NewAccountRegistered(
 	userId uuid.UUID,
 	login, createdBy string,

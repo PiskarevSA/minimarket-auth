@@ -15,7 +15,7 @@ func (e *PasswordError) Error() string {
 }
 
 const (
-	mixPasswordLen = 12
+	minPasswordLen = 12
 	maxPasswordLen = 24
 )
 
@@ -28,7 +28,7 @@ var NilPassword Password = nil
 
 func NewPassword(value string) (Password, error) {
 	passwordLen := len(value)
-	if passwordLen < mixPasswordLen {
+	if passwordLen < minPasswordLen {
 		return NilPassword, ErrPasswordTooShort
 	}
 

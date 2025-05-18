@@ -10,20 +10,20 @@ import (
 var conf config
 
 type config struct {
-	LogLevel           string
-	ServerAddr         string
-	ServerReadTimeout  time.Duration
-	ServerWriteTimeout time.Duration
-	ServerIdleTimeout  time.Duration
-	PostgreSqlAddr     string
-	PostgreSqlUser     string
-	PostgreSqlPassword string
-	PostgreSqlDb       string
-	PostgreSqlSslMode  bool
-	JwtSigningKey      any
-	JwtSigningMethod   jwt.SigningMethod
-	JwtAccessTokenTtl  time.Duration
-	JwtRefreshTokenTtl time.Duration
+	LogLevel              string
+	ServerAddr            string
+	ServerReadTimeout     time.Duration
+	ServerWriteTimeout    time.Duration
+	ServerIdleTimeout     time.Duration
+	PostgreSqlAddr        string
+	PostgreSqlUser        string
+	PostgreSqlPassword    string
+	PostgreSqlDb          string
+	PostgreSqlSslMode     bool
+	JwtSigningKeyFilePath string
+	JwtSigningMethod      jwt.SigningMethod
+	JwtAccessTokenTtl     time.Duration
+	JwtRefreshTokenTtl    time.Duration
 }
 
 func Config() *config {
@@ -66,8 +66,8 @@ func PostgreSqlConnUrl() string {
 	return connUrl
 }
 
-func JwtSigningKey() any {
-	return conf.JwtSigningKey
+func JwtSigningKeyFilePath() string {
+	return conf.JwtSigningKeyFilePath
 }
 
 func JwtSigningMethod() jwt.SigningMethod {

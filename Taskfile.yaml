@@ -26,3 +26,10 @@ tasks:
       основе SQL при помощи SQLc.
     cmds:
       - sqlc generate -f .sqlc.yaml
+  generate:mockery:all:
+    desc: |
+      Run Mockery to generate mock implementations for Go interfaces. 
+      This command will create type-safe mock structs and methods for 
+      testing purposes.
+    cmds:
+    - mockery

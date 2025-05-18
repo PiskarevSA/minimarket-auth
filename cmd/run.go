@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -42,15 +43,26 @@ var run = &cli.Command{
 		router.Use(pkgmiddlewares.Decompress)
 
 		postgreSql := postgresql.New(pgxPool)
+
+		jwtSigningKeyBytes, err := os.ReadFile(config.JwtSigningKeyFilePath())
+		if err != nil {
+			log.Fatal().Err(err).Send()
+		}
+		jwtSigningKey := string(jwtSigningKeyBytes)
+
 		jwtManager := jwtmanager.New(
-			config.JwtSigningKey(),
+			jwtSigningKey,
 			config.JwtSigningMethod(),
 			serviceName,
 			config.JwtAccessTokenTtl(),
 			config.JwtRefreshTokenTtl(),
 		)
 
-		login := usecases.NewLogin(serviceName, postgreSql, jwtManager)
+		login := usecases.NewLogin(
+			serviceName,
+			postgreSql,
+			jwtManager)
+
 		register := usecases.NewRegister(
 			serviceName,
 			postgreSql,
@@ -84,6 +96,8 @@ var run = &cli.Command{
 		}()
 
 		<-ctx.Done()
+
+		log.Info().Msg("server stopped")
 
 		return nil
 	},
@@ -145,6 +159,13 @@ var runFlags = []cli.Flag{
 		Name:        "postgresql.sslmode",
 		Value:       false,
 		Destination: &config.Config().PostgreSqlSslMode,
+	},
+
+	&cli.StringFlag{
+		Name:        "jwt.signkeyfilepath",
+		Value:       "jwt.pem",
+		Usage:       "path to file with sign key for ES256 algorithm",
+		Destination: &config.Config().JwtSigningKeyFilePath,
 	},
 
 	&cli.StringFlag{

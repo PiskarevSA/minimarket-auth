@@ -86,6 +86,6 @@ formatters:
   settings:
     goimports:
       local-prefixes:
-        - github.com/PiskarevSA/minimarket
+        - github.com/PiskarevSA/minimarket-auth
     golines:
       max-len: 80

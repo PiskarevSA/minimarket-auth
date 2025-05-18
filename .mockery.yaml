@@ -1,0 +1,8 @@
+template: matryer
+structname: '{{.Mock}}{{.InterfaceName | firstUpper}}'
+
+packages:
+  github.com/PiskarevSA/minimarket-auth/internal/usecases:
+    interfaces:
+      accountRepo:
+      outboxRepo:
