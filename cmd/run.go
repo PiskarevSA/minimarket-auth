@@ -20,7 +20,6 @@ import (
 	"github.com/PiskarevSA/minimarket-auth/internal/usecases"
 	"github.com/PiskarevSA/minimarket-auth/pkg/jwtmanager"
 	pkgmiddlewares "github.com/PiskarevSA/minimarket-auth/pkg/middlewares"
-	"github.com/PiskarevSA/minimarket-auth/pkg/pgx/transactor"
 )
 
 var run = &cli.Command{
@@ -66,8 +65,6 @@ var run = &cli.Command{
 		register := usecases.NewRegister(
 			serviceName,
 			postgreSql,
-			postgreSql,
-			transactor.New(pgxPool),
 			jwtManager,
 		)
 

@@ -10,7 +10,6 @@ import (
 
 	"github.com/PiskarevSA/minimarket-auth/internal/domain/entities"
 	"github.com/PiskarevSA/minimarket-auth/internal/domain/objects"
-	"github.com/PiskarevSA/minimarket-auth/internal/events"
 	"github.com/google/uuid"
 )
 
@@ -133,77 +132,5 @@ func (mock *mockAccountRepo) GetUserIdAndPasswordHashCalls() []struct {
 	mock.lockGetUserIdAndPasswordHash.RLock()
 	calls = mock.calls.GetUserIdAndPasswordHash
 	mock.lockGetUserIdAndPasswordHash.RUnlock()
-	return calls
-}
-
-// Ensure that mockOutboxRepo does implement outboxRepo.
-// If this is not the case, regenerate this file with mockery.
-var _ outboxRepo = &mockOutboxRepo{}
-
-// mockOutboxRepo is a mock implementation of outboxRepo.
-//
-//	func TestSomethingThatUsesoutboxRepo(t *testing.T) {
-//
-//		// make and configure a mocked outboxRepo
-//		mockedoutboxRepo := &mockOutboxRepo{
-//			CreateOutboxInTxFunc: func(ctx context.Context, event events.Event) error {
-//				panic("mock out the CreateOutboxInTx method")
-//			},
-//		}
-//
-//		// use mockedoutboxRepo in code that requires outboxRepo
-//		// and then make assertions.
-//
-//	}
-type mockOutboxRepo struct {
-	// CreateOutboxInTxFunc mocks the CreateOutboxInTx method.
-	CreateOutboxInTxFunc func(ctx context.Context, event events.Event) error
-
-	// calls tracks calls to the methods.
-	calls struct {
-		// CreateOutboxInTx holds details about calls to the CreateOutboxInTx method.
-		CreateOutboxInTx []struct {
-			// Ctx is the ctx argument value.
-			Ctx context.Context
-			// Event is the event argument value.
-			Event events.Event
-		}
-	}
-	lockCreateOutboxInTx sync.RWMutex
-}
-
-// CreateOutboxInTx calls CreateOutboxInTxFunc.
-func (mock *mockOutboxRepo) CreateOutboxInTx(ctx context.Context, event events.Event) error {
-	if mock.CreateOutboxInTxFunc == nil {
-		panic("mockOutboxRepo.CreateOutboxInTxFunc: method is nil but outboxRepo.CreateOutboxInTx was just called")
-	}
-	callInfo := struct {
-		Ctx   context.Context
-		Event events.Event
-	}{
-		Ctx:   ctx,
-		Event: event,
-	}
-	mock.lockCreateOutboxInTx.Lock()
-	mock.calls.CreateOutboxInTx = append(mock.calls.CreateOutboxInTx, callInfo)
-	mock.lockCreateOutboxInTx.Unlock()
-	return mock.CreateOutboxInTxFunc(ctx, event)
-}
-
-// CreateOutboxInTxCalls gets all the calls that were made to CreateOutboxInTx.
-// Check the length with:
-//
-//	len(mockedoutboxRepo.CreateOutboxInTxCalls())
-func (mock *mockOutboxRepo) CreateOutboxInTxCalls() []struct {
-	Ctx   context.Context
-	Event events.Event
-} {
-	var calls []struct {
-		Ctx   context.Context
-		Event events.Event
-	}
-	mock.lockCreateOutboxInTx.RLock()
-	calls = mock.calls.CreateOutboxInTx
-	mock.lockCreateOutboxInTx.RUnlock()
 	return calls
 }
